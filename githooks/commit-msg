@@ -1,0 +1,8 @@
+#!/bin/sh
+# Remove Co-authored-by lines that attribute commits to Cursor (IDE/agents may inject these).
+COMMIT_MSG_FILE="$1"
+[ -n "$COMMIT_MSG_FILE" ] && [ -f "$COMMIT_MSG_FILE" ] || exit 0
+TMP="${COMMIT_MSG_FILE}.stripped.$$"
+grep -v -iE '^Co-authored-by:[[:space:]]*cursor' "$COMMIT_MSG_FILE" > "$TMP" || { rm -f "$TMP"; exit 0; }
+mv -f "$TMP" "$COMMIT_MSG_FILE"
+exit 0
